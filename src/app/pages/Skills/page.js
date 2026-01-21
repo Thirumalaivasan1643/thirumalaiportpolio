@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -8,116 +9,146 @@ gsap.registerPlugin(ScrollTrigger);
 export default function TechnicalSkills() {
   const [activeCategory] = useState("Frontend Development");
 
+  // Mobile auto slider index
+  const [mobileIndex, setMobileIndex] = useState(0);
+
   const skillCategories = [
     {
       id: "frontend",
       title: "Frontend Development",
-      skills: [
-        "React.js","Next.js","Redux","JavaScript (ES6+)","TypeScript",
-        "Tailwind CSS","HTML5","CSS3","Framer Motion","GSAP","AOS","GlassMorphism"
-      ],
+      skills: ["React.js", "Next.js", "Redux", "JavaScript", "TypeScript", "Tailwind"],
       color: "blue",
     },
     {
       id: "mobile",
       title: "Mobile Development",
-      skills: [
-        "React Native","Expo","iOS Development","Android Development",
-        "Mobile UI/UX","Cross-platform","Push Notifications",
-      ],
+      skills: ["React Native", "Expo", "iOS", "Android"],
       color: "purple",
     },
     {
       id: "backend",
       title: "Backend Development",
-      skills: [
-        "Node.js","Express.js","REST APIs","Python",
-        "Microservices","API Optimization","WebSocket","Socket.IO",
-      ],
+      skills: ["Node.js", "Express", "REST API", "Socket.IO"],
       color: "green",
     },
     {
       id: "database",
       title: "Databases",
-      skills: ["MongoDB","Mongoose","Firebase",],
+      skills: ["MongoDB", "Firebase"],
       color: "yellow",
     },
     {
       id: "security",
       title: "Security & Auth",
-      skills: ["JWT","NextAuth.js","OAuth 2.0","CORS","Encryption"],
+      skills: ["JWT", "OAuth", "NextAuth"],
       color: "red",
     },
     {
       id: "tools",
       title: "Tools & Platforms",
-      skills: [
-        "Git","GitHub","Docker","AWS","Vercel","Figma",
-        "Postman","Jira","Webpack",
-      ],
+      skills: ["Git", "GitHub", "Docker", "AWS", "Vercel"],
       color: "indigo",
     },
   ];
 
-  return (
-    <section id="skills" className=" py-20">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-xl text-gray-900 mb-3">
-            Technical{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-              Skills
-            </span>
-          </h2>
-          <p className="text-sm text-gray-600 max-w-2xl mx-auto">
-            A modern technology stack I use to build scalable and high-performance applications.
-          </p>
-        </div>
+  // Auto loop effect (mobile only)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMobileIndex((prev) => (prev + 1) % skillCategories.length);
+    }, 2500);
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          {skillCategories.map((category) => (
-            <SkillBox
-              key={category.id}
-              title={category.title}
-              skills={category.skills}
-              color={category.color}
-              isActive={activeCategory === category.title}
-            />
-          ))}
-        </div>
+    return () => clearInterval(interval);
+  }, [skillCategories.length]);
+
+  return (
+    <>
+      {/* ===================== DESKTOP ===================== */}
+      <div className="hidden md:block">
+        <section id="skills" className="py-20">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-xl text-gray-900 mb-3">
+                Technical{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                  Skills
+                </span>
+              </h2>
+              <p className="text-sm text-gray-600 max-w-2xl mx-auto">
+                A modern technology stack I use to build scalable applications.
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-3 gap-6">
+              {skillCategories.map((category) => (
+                <SkillBox
+                  key={category.id}
+                  title={category.title}
+                  skills={category.skills}
+                  color={category.color}
+                  isActive={activeCategory === category.title}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
+
+      {/* ===================== MOBILE AUTO LOOP ===================== */}
+      <div className="block md:hidden">
+        <section id="skills" className="py-10 px-4 bg-gray-50 overflow-hidden">
+          <div className="max-w-md mx-auto text-center mb-4">
+            <p className="text-xs text-gray-600">
+              Technologies I use to build modern applications
+            </p>
+          </div>
+
+          <div className="relative w-full overflow-hidden">
+            <div
+              className="flex transition-transform duration-700 ease-in-out"
+              style={{ transform: `translateX(-${mobileIndex * 100}%)` }}
+            >
+              {skillCategories.map((category) => (
+                <div
+                  key={category.id}
+                  className="min-w-full flex justify-center px-4"
+                >
+                  <MobileSkillCard category={category} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
   );
 }
 
-/* ---------------- Skill Box ---------------- */
+/* ===================== DESKTOP SKILL BOX ===================== */
 
-function SkillBox({ title, skills, color, isActive = true }) {
+function SkillBox({ title, skills, color }) {
   const boxRef = useRef(null);
   const skillsRef = useRef([]);
 
   const colorSchemes = {
-    blue: { border: "border-blue-200", text: "text-blue-700", badge: "bg-blue-50 text-blue-700" },
-    green: { border: "border-green-200", text: "text-green-700", badge: "bg-green-50 text-green-700" },
-    purple: { border: "border-purple-200", text: "text-purple-700", badge: "bg-purple-50 text-purple-700" },
-    yellow: { border: "border-amber-200", text: "text-amber-700", badge: "bg-amber-50 text-amber-700" },
-    red: { border: "border-rose-200", text: "text-rose-700", badge: "bg-rose-50 text-rose-700" },
-    indigo: { border: "border-indigo-200", text: "text-indigo-700", badge: "bg-indigo-50 text-indigo-700" },
+    blue: "border-blue-200 text-blue-700 bg-blue-50",
+    green: "border-green-200 text-green-700 bg-green-50",
+    purple: "border-purple-200 text-purple-700 bg-purple-50",
+    yellow: "border-amber-200 text-amber-700 bg-amber-50",
+    red: "border-rose-200 text-rose-700 bg-rose-50",
+    indigo: "border-indigo-200 text-indigo-700 bg-indigo-50",
   };
 
-  const colors = colorSchemes[color];
+  const colors = colorSchemes[color].split(" ");
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         boxRef.current,
-        { y: 50, opacity: 0, scale: 0.95 },
+        { y: 40, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          scale: 1,
-          duration: 0.8,
-          ease: "power3.out",
+          duration: 0.7,
           scrollTrigger: {
             trigger: boxRef.current,
             start: "top 80%",
@@ -127,14 +158,12 @@ function SkillBox({ title, skills, color, isActive = true }) {
 
       gsap.fromTo(
         skillsRef.current,
-        { y: 25, opacity: 0, scale: 0.8 },
+        { y: 20, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          scale: 1,
-          stagger: 0.08,
-          duration: 0.6,
-          ease: "back.out(1.7)",
+          stagger: 0.05,
+          duration: 0.5,
           scrollTrigger: {
             trigger: boxRef.current,
             start: "top 75%",
@@ -146,49 +175,65 @@ function SkillBox({ title, skills, color, isActive = true }) {
     return () => ctx.revert();
   }, []);
 
-  const animateSkills = () => {
-    gsap.to(skillsRef.current, {
-      y: -6,
-      scale: 1.08,
-      stagger: 0.04,
-      duration: 0.3,
-      ease: "power2.out",
-    });
+  return (
+    <div
+      ref={boxRef}
+      className={`border ${colors[0]} rounded-xl p-6 w-[400px] h-[200px]`}
+    >
+      <h3 className={`text-sm font-semibold mb-4 ${colors[1]}`}>
+        {title}
+      </h3>
+
+      <div className="flex flex-wrap gap-2">
+        {skills.map((skill, i) => (
+          <span
+            key={i}
+            ref={(el) => (skillsRef.current[i] = el)}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium ${colors[2]}`}
+          >
+            {skill}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ===================== MOBILE SKILL CARD ===================== */
+
+function MobileSkillCard({ category }) {
+  const colorSchemes = {
+    blue: "border-blue-200 text-blue-700 bg-blue-50",
+    green: "border-green-200 text-green-700 bg-green-50",
+    purple: "border-purple-200 text-purple-700 bg-purple-50",
+    yellow: "border-amber-200 text-amber-700 bg-amber-50",
+    red: "border-rose-200 text-rose-700 bg-rose-50",
+    indigo: "border-indigo-200 text-indigo-700 bg-indigo-50",
   };
 
-  const resetSkillsAnimation = () => {
-    gsap.to(skillsRef.current, {
-      y: 0,
-      scale: 1,
-      stagger: 0.04,
-      duration: 0.3,
-      ease: "power2.out",
-    });
-  };
+  const colors = colorSchemes[category.color].split(" ");
 
   return (
-   <div
-  ref={boxRef}
-  className={`lg:block ${!isActive && "hidden lg:block"}`}
-  onMouseEnter={animateSkills}
-  onMouseLeave={resetSkillsAnimation}
->
-  <div className={`border ${colors.border} rounded-xl p-6 w-[400px] h-[200px] overflow-hidden`}>
-    <h3 className={`text-sm font-semibold mb-4 ${colors.text}`}>{title}</h3>
-
-    <div className="flex flex-wrap gap-2">
-      {skills.map((skill, i) => (
-        <span
-          key={i}
-          ref={(el) => (skillsRef.current[i] = el)}
-          className={`px-3 py-1.5 rounded-full text-xs font-medium ${colors.badge} opacity-0`}
-        >
-          {skill}
+    <div className={`border ${colors[0]} rounded-xl p-4 w-[260px] bg-white shadow-sm`}>
+      <div className="flex justify-between mb-3">
+        <h3 className={`text-sm font-semibold ${colors[1]}`}>
+          {category.title}
+        </h3>
+        <span className="text-[10px] bg-gray-100 px-2 py-0.5 rounded-full">
+          {category.skills.length}
         </span>
-      ))}
-    </div>
-  </div>
-</div>
+      </div>
 
+      <div className="flex flex-wrap gap-2">
+        {category.skills.map((skill, i) => (
+          <span
+            key={i}
+            className={`px-3 py-1 rounded-full text-[11px] font-medium ${colors[2]}`}
+          >
+            {skill}
+          </span>
+        ))}
+      </div>
+    </div>
   );
 }

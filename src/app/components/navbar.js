@@ -1,10 +1,11 @@
 "use client";
 
-import { Download } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Download, Menu, X } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const downloadCV = () => {
     const link = document.createElement("a");
@@ -12,18 +13,35 @@ export default function Navbar() {
     link.download = "Thirumalai-Resume.pdf";
     link.click();
   };
+  const mobileMenuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        isMobileMenuOpen &&
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target)
+      ) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
 
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (!el) return;
 
-    const y =
-      el.getBoundingClientRect().top +
-      window.scrollY -
-      90;
+    const y = el.getBoundingClientRect().top + window.scrollY - 90;
 
     window.scrollTo({ top: y, behavior: "smooth" });
     setActiveSection(id);
+    setIsMobileMenuOpen(false);
   };
 
   // Scroll spy (robust version)
@@ -61,24 +79,57 @@ export default function Navbar() {
     }`;
 
   return (
-    <nav className="fixed top-0 left-0 w-full flex justify-between items-center px-8 py-4 bg-white shadow-sm z-50">
-      <div className="text-xl font-bold">Developerzzz</div>
+    <>
+      {/* LAPTOP VIEW (Desktop) - Full Navigation */}
+      <div className="hidden md:block">
+        <nav className="fixed top-0 left-0 w-full flex justify-between items-center px-8 py-4 bg-white shadow-sm z-50">
+          <div className="text-xl font-bold">Developerzzz</div>
 
-      <div className="hidden xl:flex lg:flex 2xl:flex space-x-4 text-sm">
-        <button onClick={() => scrollToSection("home")} className={navBtnClass("home")}>Home</button>
-        <button onClick={() => scrollToSection("about")} className={navBtnClass("about")}>About</button>
-        <button onClick={() => scrollToSection("skills")} className={navBtnClass("skills")}>Skills</button>
-        <button onClick={() => scrollToSection("projects")} className={navBtnClass("projects")}>Projects</button>
-        <button onClick={() => scrollToSection("contact")} className={navBtnClass("contact")}>Contact</button>
+          <div className="flex space-x-4 text-sm">
+            <button
+              onClick={() => scrollToSection("home")}
+              className={navBtnClass("home")}
+            >
+              Home
+            </button>
+            <button
+              onClick={() => scrollToSection("about")}
+              className={navBtnClass("about")}
+            >
+              About
+            </button>
+            <button
+              onClick={() => scrollToSection("skills")}
+              className={navBtnClass("skills")}
+            >
+              Skills
+            </button>
+            <button
+              onClick={() => scrollToSection("projects")}
+              className={navBtnClass("projects")}
+            >
+              Projects
+            </button>
+            <button
+              onClick={() => scrollToSection("contact")}
+              className={navBtnClass("contact")}
+            >
+              Contact
+            </button>
+          </div>
+
+          <button
+            onClick={downloadCV}
+            className="bg-yellow-400 px-4 py-2 text-sm rounded-xl flex items-center text-white hover:bg-yellow-500"
+          >
+            <Download size={18} className="mr-2" />
+            Download CV
+          </button>
+        </nav>
       </div>
 
-      <button
-        onClick={downloadCV}
-        className="bg-yellow-400 px-4 py-2 text-sm rounded-xl flex items-center text-white hover:bg-yellow-500"
-      >
-        <Download size={18} className="mr-2" />
-        Download CV
-      </button>
-    </nav>
+      {/* MOBILE VIEW - Hamburger Menu */}
+      
+    </>
   );
 }
