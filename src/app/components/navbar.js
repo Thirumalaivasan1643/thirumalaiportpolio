@@ -83,7 +83,7 @@ export default function Navbar() {
       {/* LAPTOP VIEW (Desktop) - Full Navigation */}
       <div className="hidden md:block">
         <nav className="fixed top-0 left-0 w-full flex justify-between items-center px-8 py-4 bg-white shadow-sm z-50">
-          <div className="text-xl font-bold">Developerzzz</div>
+          <div className="text-xl font-bold">Thirumalai</div>
 
           <div className="flex space-x-4 text-sm">
             <button
@@ -128,8 +128,7 @@ export default function Navbar() {
         </nav>
       </div>
 
-      {/* MOBILE VIEW - Hamburger Menu */}
-      
+       
     </>
   );
 }

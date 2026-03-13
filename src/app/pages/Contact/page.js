@@ -73,7 +73,7 @@ export default function ContactPage() {
   return (
     <div>
       <div className="hidden sm:hidden md:hidden lg:block xl:block 2xl:block">
-        <section id="contact" className="min-h-screen py-10 px-4 ">
+        <section id="contact" className="min-h-screen py-10 px-10 ">
           <div className="max-w-6xl mx-auto">
             {/* Header */}
             <div className="text-center mb-12">

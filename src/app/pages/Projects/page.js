@@ -100,7 +100,7 @@ export default function Projects() {
 
   return (
     <div>
-      <div className="hidden sm:hidden md:hidden lg:block xl:block 2xl:block">
+      <div className="hidden sm:hidden md:hidden lg:block xl:block px-16 2xl:block">
         <section
           id="projects"
           className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-10 px-6"

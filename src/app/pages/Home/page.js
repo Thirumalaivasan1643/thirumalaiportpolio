@@ -55,7 +55,7 @@ function Home() {
 
   return (
     <div>
-      <div className="md:hidden sm:hidden hidden xl:block lg:block 2xl:block">
+      <div className="md:hidden sm:hidden hidden xl:block lg:block 2xl:block px-16 py-10">
         <>
           {/* Font */}
           <style>

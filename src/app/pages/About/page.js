@@ -8,7 +8,7 @@ export default function About() {
       <div className="hidden md:block">
         <section
           id="about"
-          className="min-h-screen text-black font-poppins py-10 px-6 scroll-mt-[90px]"
+          className="min-h-screen text-black font-poppins py-10 px-20 scroll-mt-[90px]"
         >
           <div className="max-w-5xl mx-auto">
 

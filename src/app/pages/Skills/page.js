@@ -78,7 +78,7 @@ export default function TechnicalSkills() {
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-6">
+            <div className="flex gap-6">
               {skillCategories.map((category) => (
                 <SkillBox
                   key={category.id}
@@ -178,7 +178,7 @@ function SkillBox({ title, skills, color }) {
   return (
     <div
       ref={boxRef}
-      className={`border ${colors[0]} rounded-xl p-6 w-[400px] h-[200px]`}
+      className={`border ${colors[0]} rounded-xl p-6 w-[400px] h-[300px]`}
     >
       <h3 className={`text-sm font-semibold mb-4 ${colors[1]}`}>
         {title}
